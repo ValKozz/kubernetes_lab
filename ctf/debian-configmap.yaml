@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: debian-podconfig
+data:
+    start.sh: |
+      #!/bin/bash
+      echo "Initiliazing container..."
+      echo "Running apt update and installs..."
+      apt-get update
+      apt-get install -y openssh-server sudo
+
+      useradd -m -s /bin/bash $GUEST
+      echo "$GUEST:$UPASS" | sudo chpasswd
+      echo "User '$GUEST' has been created..."
+      service ssh start && tail -f /dev/null

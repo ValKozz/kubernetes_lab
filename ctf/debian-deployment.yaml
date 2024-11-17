@@ -1,0 +1,51 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: debian-deployment
+  labels:
+    app: debian-container
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: debian-container
+  template:
+    metadata:
+      labels:
+        app: debian-container
+    spec:
+      containers:
+      - name: debian-container
+        image: debian
+        volumeMounts:
+        - name: debian-podconfig
+          mountPath: /configMap
+          readOnly: false
+        command: ["/bin/sh", "/configMap/start.sh"]
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+          requests:
+            memory: "64Mi"
+            cpu: "100m"
+        ports:
+        - containerPort: 22
+        env:
+        - name: GUEST
+          valueFrom:
+            secretKeyRef:
+              name: debian-secret
+              key: username
+        - name: UPASS
+          valueFrom:
+            secretKeyRef:
+              name: debian-secret
+              key: password
+      volumes:
+      - name: debian-podconfig
+        configMap:
+          name: debian-podconfig
+
+
