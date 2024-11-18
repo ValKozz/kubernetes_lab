@@ -1,0 +1,8 @@
+alias kubectl="microk8s kubectl"
+alias apply="microk8s kubectl apply"
+alias delete="microk8s kubectl delete"
+alias pods="microk8s kubectl get pods"
+alias nodes="microk8s kubectl get nodes"
+alias logs="microk8s kubectl logs"
+alias despod="microk8s kubectl describe pods"
+alias execpod="microk8s kubectl exec -it" 

@@ -9,8 +9,8 @@ data:
       echo "Running apt update and installs..."
       apt-get update
       apt-get install -y openssh-server sudo
+      echo "Creating new group"
+      groupadd guests
+      useradd $GUEST -s /bin/bash -m -g guests -G guests
 
-      useradd -m -s /bin/bash $GUEST
-      echo "$GUEST:$UPASS" | sudo chpasswd
-      echo "User '$GUEST' has been created..."
       service ssh start && tail -f /dev/null

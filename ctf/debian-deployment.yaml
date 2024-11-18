@@ -20,9 +20,9 @@ spec:
         image: debian
         volumeMounts:
         - name: debian-podconfig
-          mountPath: /configMap
+          mountPath: /etc/configMap/
           readOnly: false
-        command: ["/bin/sh", "/configMap/start.sh"]
+        command: ["/bin/sh", "/etc/configMap/start.sh"]
         resources:
           limits:
             memory: "128Mi"
