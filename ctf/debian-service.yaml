@@ -10,4 +10,3 @@ spec:
     port: 2222
     targetPort: 22
   type: NodePort
-

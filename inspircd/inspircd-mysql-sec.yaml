@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: inspircd-db-secret
+  namespace: inspircd
+type: Opaque
+data:
+  dbuser: aW5zcGlyY2QK
+  dbpass: YW5vbgo=
+

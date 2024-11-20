@@ -1,0 +1,66 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: inspircd-deployment
+  namespace: inspircd
+  labels:
+    app: insipircd-server
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: inspircd-server
+  template:
+    metadata:
+      namespace: inspircd
+      labels:
+        app: inspircd-server
+    spec:
+      containers:
+      - name: inspircd
+        image: valkozz/inspircd-server
+        imagePullPolicy: IfNotPresent
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+            requests:
+            memory: "64Mi"
+            cpu: "100m"
+        ports:
+        - containerPort: 6667
+        env:
+        - name: DBUSER
+          valueFrom:
+            secretKeyRef:
+              name: inspircd-db-secret
+              key: dbuser
+        - name: DBPASS
+          valueFrom:
+            secretKeyRef:
+              name: inspircd-db-secret
+              key: dbpass
+        volumeMounts:
+        - name: tls-volume
+          mountPath: /etc/ssl/certs/
+          readOnly: true
+        readinessProbe:
+          exec:
+            command:
+            - sh
+            - -c
+            - nc -zv localhost 6667
+          initialDelaySeconds: 10
+          periodSeconds: 5
+        livenessProbe:
+          exec:
+            command:
+            - sh
+            - -c
+            - nc -zv localhost 6667
+          initialDelaySeconds: 30
+          periodSeconds: 10
+      volumes:
+      - name: tls-volume
+        secret:
+          secretName: irc-tls-secret

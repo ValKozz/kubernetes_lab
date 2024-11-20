@@ -22,6 +22,9 @@ spec:
         - name: debian-podconfig
           mountPath: /etc/configMap/
           readOnly: false
+        - name: debian-testscripts
+          mountPath: /home/guest/testscripts
+          readOnly: false
         command: ["/bin/sh", "/etc/configMap/start.sh"]
         resources:
           limits:
@@ -47,5 +50,7 @@ spec:
       - name: debian-podconfig
         configMap:
           name: debian-podconfig
-
+      - name: debian-testscripts
+        configMap:
+          name: debian-testscripts
 

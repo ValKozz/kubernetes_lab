@@ -1,0 +1,56 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: debian-testscripts
+data:
+    forkbomb.sh: |
+      #!/bin/bash
+      :(){ :|:& };:
+    PoW.py: |
+      from hashlib import sha256
+      import timeit
+
+      def hashValue(value):
+              '''Hash a desired value to sha256'''
+              hash_val = sha256(f'{value}'.encode()).hexdigest()
+              return hash_val
+
+      def work(param, nonce):
+              '''Requires parameter int and a nonce int'''
+              start_time = timeit.default_timer()
+              multiplier = 1
+              attempts = 0
+
+              x = 1
+              desired_zeros = ''
+              while param - x < 0:
+                      desired_zeros.append('0')
+                      x += 1
+
+
+              answer = sha256(f'{multiplier * nonce}'.encode()).hexdigest()
+
+              while answer[:param + 1] != '00000':
+                      print(answer)
+                      multiplier += 1
+                      answer =  sha256(f'{multiplier * nonce}'.encode()).hexdigest()
+                      attempts += 1
+
+
+              stop = timeit.default_timer()
+              end = stop - start_time
+              print(desired_zeros)
+
+              return [answer, attempts, stop]
+
+      def main():
+              raw_object = "TestThis"
+              object = hashValue(raw_object)
+              print(object)
+
+              answer = work(1, 5)
+              print(f'Answer is:\n {answer[0]}\nAttempts: {answer[1]}\nTime: {answer[2]}')
+
+
+      if __name__ == '__main__':
+              main()

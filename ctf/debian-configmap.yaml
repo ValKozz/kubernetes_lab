@@ -8,9 +8,10 @@ data:
       echo "Initiliazing container..."
       echo "Running apt update and installs..."
       apt-get update
-      apt-get install -y openssh-server sudo
-      echo "Creating new group"
-      groupadd guests
-      useradd $GUEST -s /bin/bash -m -g guests -G guests
+      apt-get install -y openssh-server sudo openssl python3
 
+      echo "Creating guest user..."
+      useradd -p $(openssl passwd -1 $UPASS) $GUEST
+      echo "Starting ssh service..."    
       service ssh start && tail -f /dev/null
+      echo "Container Ready!"

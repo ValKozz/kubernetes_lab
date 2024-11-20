@@ -1,0 +1,5 @@
+irc-server.crt
+irc-server.key
+sql_snip.xml
+*.kate-swp
+*.swp
